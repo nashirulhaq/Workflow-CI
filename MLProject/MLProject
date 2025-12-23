@@ -1,0 +1,5 @@
+name: medical-cost-ci
+
+entry_points:
+  main:
+    command: "python modelling.py"
