@@ -1,0 +1,50 @@
+name: MLflow CI Training
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  train-model:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Set up job + checkout
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Set up Python 3.12.7
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.7'
+
+      # 3. Check Environment
+      - name: Check environment
+        run: |
+          python --version
+          pip --version
+          echo "Working directory:"
+          pwd
+          ls -la
+
+      # 4. Install dependencies
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install mlflow==2.19.0 pandas scikit-learn
+
+      # 5. Run MLflow Project
+      - name: Run MLflow Project
+        run: |
+          cd MLProject
+          mlflow run .
+
+      # 6. Get latest MLflow run_id
+      - name: Get latest MLflow run_id
+        run: |
+          cd MLProject
+          echo "Latest MLflow run_id:"
+          ls -td mlruns/*/* | head -n 1
